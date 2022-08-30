@@ -17,16 +17,23 @@ function onItemHandler(e) {
   e.preventDefault();
 
   if (e.target.classList.contains('gallery__image')) {
-    const pictureInModal = basicLightbox.create(`
+    const pictureInModal = basicLightbox.create(
+      `
       <img src = ${e.target.dataset.source}>
-  `);
+  `,
+      {
+        onShow: () => {
+          document.addEventListener('keydown', closeModal);
+        },
+        onClose: () => {
+          document.removeEventListener('keydown', closeModal);
+        },
+      }
+    );
     pictureInModal.show();
-
-    document.addEventListener('keydown', closeModal);
     function closeModal(e) {
       if (e.code === 'Escape') {
         pictureInModal.close();
-        document.removeEventListener('keydown', closeModal);
       }
     }
   }
